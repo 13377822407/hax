@@ -1,0 +1,19 @@
+visualization_msgs:
+  displays:
+    - Class: rviz_default_plugins/Map
+      Name: Map
+      Topic: /map
+      
+    - Class: rviz_default_plugins/LaserScan
+      Name: Scan
+      Topic: /scan
+      
+    - Class: rviz_default_plugins/Path
+      Name: Global Plan
+      Topic: /plan
+      
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      
+    - Class: rviz_default_plugins/TF
+      Name: TF

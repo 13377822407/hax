@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>robot_launch</name>
+  <version>0.0.1</version>
+  <description>Launch files for delivery robot</description>
+  <maintainer email="user@example.com">user</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>robot_description</depend>
+  <depend>robot_navigation</depend>
+  <depend>robot_perception</depend>
+  <depend>robot_control</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
