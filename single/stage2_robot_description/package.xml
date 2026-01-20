@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>stage2_robot_description</name>
+  <version>0.1.0</version>
+  <description>Stage 2: Robot Description (URDF + TF)</description>
+  <maintainer email="hax@example.com">hax</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>geometry_msgs</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>builtin_interfaces</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

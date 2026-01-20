@@ -1,0 +1,21 @@
+# Build outputs
+build/
+install/
+log/
+
+# Colcon build artifacts
+**/build/
+**/install/
+**/log/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# Misc
+*.swp
+*.tmp
+*.log
