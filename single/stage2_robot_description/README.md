@@ -1,5 +1,10 @@
 # Stage 2: 机器人描述（URDF + TF）
+本阶段目标：
+- 用 URDF 描述机器人：几何、关节、传感器、惯量。
+- 用 robot_state_publisher 把 URDF 变成 TF 树自动广播。
+- 用 tf2_ros 写静态/动态 TF 广播器，理解 `odom -> base_link -> sensors`。
 
+<<<<<<< HEAD
 > 本文是“超详细新手手册”，长度与 Stage1 持平，覆盖背景概念、工具使用、代码讲解、构建运行、排错、练习、FAQ。适合第一次接触 URDF/TF 的你。
 
 本阶段目标（3 行记牢）：
@@ -71,6 +76,72 @@ roslearn/
 - visual：可视化几何（box/cylinder/sphere/mesh）。
 - inertial：质量与惯性矩（本示例简化）。
 
+=======
+目录导航（快速跳转）：
+- 1. 环境与前置条件
+- 2. 目录结构与文件角色
+- 3. URDF 入门到实践
+- 4. TF 基础与常见 Frame 树
+- 5. 代码逐行讲解（静态 TF / 动态 TF / Launch）
+- 6. 构建与运行（含 Docker 注意事项）
+- 7. 验证与可视化
+- 8. 常见报错与排查脚本
+- 9. 练习与扩展任务
+- 10. 速查表与命令合集
+
+-------------------------------------------------------------------------------
+1. 环境与前置条件
+-------------------------------------------------------------------------------
+硬件/软件：
+- ROS 2 Jazzy（容器内）。
+- 工作区路径：`/home/hax/roslearn/single`。
+- 已完成 Stage1，具备 ros2 run / colcon build 基本操作。
+
+你需要知道的基础（若不熟可回顾）：
+- ros2 run / ros2 launch 的区别。
+- 话题 (topic) 的基本概念。
+- CMakeLists.xml / package.xml 的作用。
+
+本阶段新增概念：
+- URDF（Unified Robot Description Format）：用 XML 描述机器人结构。
+- TF（Transform）：坐标变换树，告诉你各部件在空间的相对位置。
+- robot_state_publisher：读取 URDF，自动发布 TF。
+- tf2_ros 广播器：手写静态/动态 TF。
+
+-------------------------------------------------------------------------------
+2. 目录结构与文件角色
+-------------------------------------------------------------------------------
+- `urdf/simple_robot.urdf`：机器人体模，差速底盘 + 左右轮 + 激光 + 相机。
+- `src/tf_static_broadcaster.cpp`：静态 TF，发布 base_link -> laser_link / camera_link。
+- `src/tf_dynamic_broadcaster.cpp`：动态 TF，发布 odom -> base_link 模拟运动。
+- `launch/description.launch.py`：一键启动 URDF + 静态 TF + 动态 TF。
+- `CMakeLists.txt`：编译目标与依赖。
+- `package.xml`：包名、依赖、license 等元数据。
+
+工作区与包：
+```
+roslearn/
+	single/                    # workspace 根（含 build/install/log）
+		stage2_robot_description/ # 当前包
+			urdf/
+			src/
+			launch/
+			README.md
+```
+
+-------------------------------------------------------------------------------
+3. URDF 入门到实践
+-------------------------------------------------------------------------------
+核心元素：
+- link：刚体，描述几何/外观/惯量，例如 base_link、left_wheel。
+- joint：连接两个 link，定义相对位姿与可动性。
+	- type: fixed / continuous / revolute / prismatic 等。
+	- origin：xyz 平移 + rpy 旋转（单位：米 + 弧度）。
+	- axis：旋转或移动轴的方向。
+- visual：可视化几何（box/cylinder/sphere/mesh）。
+- inertial：质量与惯性矩（本示例简化）。
+
+>>>>>>> 956cbfb (Stage3: Sensor processing (LaserScan safety + recorder); Stage2: README deep expansion; launch cleanup)
 我们的 simple_robot.urdf 重点：
 - base_link：长方体底盘。
 - left_wheel/right_wheel：两个连续转动关节，轴向 y。
