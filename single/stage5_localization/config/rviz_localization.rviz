@@ -1,0 +1,23 @@
+Panels:
+  - Class: rviz_default_plugins/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Name: TF
+      Class: rviz_default_plugins/TF
+      Enabled: true
+    - Name: Filtered Odometry
+      Class: rviz_default_plugins/Odometry
+      Enabled: true
+      Topic: /odometry/filtered
+      Color: [0.0, 1.0, 0.0]
+      Queue Size: 10
+    - Name: Raw Odometry
+      Class: rviz_default_plugins/Odometry
+      Enabled: true
+      Topic: /odom
+      Color: [1.0, 0.0, 0.0]
+      Queue Size: 10
+  Global Options:
+    Fixed Frame: odom

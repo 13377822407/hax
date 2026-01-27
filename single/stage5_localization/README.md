@@ -275,6 +275,32 @@ ros2 topic echo /imu
 ros2 run tf2_ros tf2_echo odom base_link
 ```
 
+RViz 可视化
+-----------
+要直观观察里程计、TF 与 EKF 融合结果，推荐使用 `rviz2`：
+
+1. 安装（若未安装）：
+```bash
+sudo apt install ros-$(ros2 distro)-rviz2
+```
+
+2. 使用本包提供的示例配置打开 RViz（在工作区根目录执行）：
+```bash
+source install/setup.bash
+ros2 run rviz2 rviz2 -d $(ros2 pkg prefix stage5_localization)/share/stage5_localization/config/rviz_localization.rviz
+```
+
+3. 推荐的显示项（若手动添加）：
+- **Fixed Frame**：`odom`
+- **TF**：显示坐标系树，确认 `odom -> base_link` 被广播
+- **Odometry**：添加两个 Odometry 显示，一个订阅 `/odometry/filtered`（颜色：绿色），另一个订阅 `/odom`（颜色：红色），可以直观比较原始里程计与滤波后结果
+- **Path / Pose**（可选）：如果你发布路径或要显示最新位姿，可添加 `Path` 或 `Pose` 显示
+
+4. 交互与调试小技巧：
+- 在 RViz 左侧选中某个显示后，可调整 `Queue Size`、颜色和缩放参数以获得更平滑的显示。
+- 如果 `/odometry/filtered` 没出现，检查 EKF 是否正在运行以及 `ekf.yaml` 中配置的 topic 名称是否一致。
+
+
 运行 `robot_localization` EKF（示例）
 --------------------------------
 下面给出一个简单的 `ekf.yaml` 配置示例和运行方法：
