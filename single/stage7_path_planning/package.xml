@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>stage7_path_planning</name>
+  <version>0.0.1</version>
+  <description>Stage7: 路径规划与导航基础示例，含详细注释与文档</description>
+  <maintainer email="user@example.com">user</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <export/>
+</package>
