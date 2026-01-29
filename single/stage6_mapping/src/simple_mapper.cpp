@@ -10,7 +10,10 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+
 #include "tf2/LinearMath/Quaternion.h"
+#include <tf2/LinearMath/Matrix3x3.h>
+#include "tf2_ros/transform_broadcaster.h"
 
 using namespace std::chrono_literals;
 
@@ -44,6 +47,9 @@ public:
 
     last_odom_time_ = this->now();
     publish_timer_ = this->create_wall_timer(500ms, std::bind(&SimpleMapper::publishMap, this));
+    
+    // TF broadcaster for map -> odom transform
+    tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
     RCLCPP_INFO(this->get_logger(), "SimpleMapper started (map %dx%d @ %.2fm)", map_width_, map_height_, resolution_);
   }
@@ -59,6 +65,9 @@ private:
     tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
     robot_yaw_ = yaw;
     last_odom_time_ = msg->header.stamp;
+    
+    // Publish map -> odom transform (identity transform for simple mapping)
+    publishMapToOdomTransform(msg->header.stamp);
   }
 
   void scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg) {
@@ -124,6 +133,24 @@ private:
 
   bool inMap(int mx, int my) {
     return mx >= 0 && mx < map_width_ && my >=0 && my < map_height_;
+  }
+  
+  void publishMapToOdomTransform(const rclcpp::Time & stamp) {
+    // For simple mapping, we assume map and odom are aligned (identity transform)
+    // In real SLAM, this would be continuously optimized
+    geometry_msgs::msg::TransformStamped t;
+    t.header.stamp = stamp;
+    t.header.frame_id = "map";
+    t.child_frame_id = "odom";
+    t.transform.translation.x = 0.0;
+    t.transform.translation.y = 0.0;
+    t.transform.translation.z = 0.0;
+    t.transform.rotation.x = 0.0;
+    t.transform.rotation.y = 0.0;
+    t.transform.rotation.z = 0.0;
+    t.transform.rotation.w = 1.0;
+    
+    tf_broadcaster_->sendTransform(t);
   }
 
   void publishMap() {
@@ -195,6 +222,7 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
   rclcpp::TimerBase::SharedPtr publish_timer_;
+  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
   std::mutex mutex_;
 };
 
